@@ -66,6 +66,8 @@ jobs:
       # 8. Levantar el frontend y ejecutar tests
       - name: Run E2E tests with WebdriverIO
         working-directory: frontend
+        env:
+          API_PATH: ${{ github.workspace }}/api
         run: |
           npm start &
           npx wait-on http://localhost:4200

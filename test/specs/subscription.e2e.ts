@@ -3,7 +3,8 @@ import { execSync } from 'child_process'
 import path from 'path'
 
 const resetDatabase = () => {
-    const apiPath = path.resolve(__dirname, '../../../campaigns-3000-api')
+    // En CI: API_PATH apunta a la carpeta 'api'. En local: usa la ruta relativa por defecto
+    const apiPath = process.env['API_PATH'] || path.resolve(__dirname, '../../../campaigns-3000-api')
     const dbPath = path.join(apiPath, 'newsletter.db')
     const sqlPath = path.join(apiPath, 'reset_db.sql')
     execSync(`sqlite3 "${dbPath}" < "${sqlPath}"`)
