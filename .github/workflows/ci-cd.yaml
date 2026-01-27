@@ -19,44 +19,62 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout code
+      # 1. Checkout del frontend
+      - name: Checkout frontend
         uses: actions/checkout@v4
+        with:
+          path: frontend
 
+      # 2. Checkout de la API
+      - name: Checkout API
+        uses: actions/checkout@v4
+        with:
+          repository: avillalbapronoide/campaigns-3000-api
+          path: api
+
+      # 3. Setup Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
 
-      - name: Install dependencies
+      # 4. Instalar dependencias de la API
+      - name: Install API dependencies
+        working-directory: api
         run: npm install
 
-      # Falla porque no tenemos la API levantada??
-      # - name: Run tests con WebdriverIO
-      #   run: |
-      #     npm start &
-      #     npx wait-on http://localhost:4200
-      #     npm run wdio
+      # 5. Resetear base de datos
+      - name: Reset database
+        working-directory: api
+        run: |
+          # rm -f newsletter.db
+          sqlite3 newsletter.db < reset_db.sql
 
-      # - name: Inject API URL environment variable
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   run: |
-      #     sed -i "s|__CAMPAIGNS_3000_API_URL__|${{ secrets.CAMPAIGNS_3000_API_URL }}|g" src/environments/environment.prod.ts
-      #     cat src/environments/environment.prod.ts
+      # 6. Levantar la API en background
+      - name: Start API
+        working-directory: api
+        run: |
+          npm start &
+          npx wait-on http://localhost:3009/api/health || npx wait-on http://localhost:3009 --timeout 30000
 
+      # 7. Instalar dependencias del frontend
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      # 8. Levantar el frontend y ejecutar tests
+      - name: Run E2E tests with WebdriverIO
+        working-directory: frontend
+        run: |
+          npm start &
+          npx wait-on http://localhost:4200
+          npm run wdio
+
+      # 9. Build del proyecto
       - name: Build project
+        working-directory: frontend
         run: npm run build
 
-      # - name: Deploy to Render
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   uses: JorgeLNJunior/render-deploy@v1.4.7
-      #   with:
-      #     service_id: ${{ secrets.RENDER_SERVICE_ID }}
-      #     api_key: ${{ secrets.RENDER_API_KEY }}
-      #     clear_cache: true # Útil para Angular para evitar problemas de versiones viejas
-      #     wait_deploy: false # El workflow esperará a que Render diga "Live"
-      #     github_deployment: true
-      #     deployment_environment: 'production'
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to Render
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: deploy # Le ponemos un ID para poder referenciarlo
