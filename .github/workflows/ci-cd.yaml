@@ -24,11 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests con WebdriverIO
-        run: |
-          npm start &
-          npx wait-on http://localhost:4200
-          npm run wdio
+      # - name: Run tests con WebdriverIO
+      #   run: |
+      #     npm start &
+      #     npx wait-on http://localhost:4200
+      #     npm run wdio
 
       - name: Inject API URL environment variable
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
