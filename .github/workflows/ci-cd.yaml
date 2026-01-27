@@ -53,7 +53,7 @@ jobs:
           service_id: ${{ secrets.RENDER_SERVICE_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
           clear_cache: true # Útil para Angular para evitar problemas de versiones viejas
-          wait_deploy: true # El workflow esperará a que Render diga "Live"
+          wait_deploy: false # El workflow esperará a que Render diga "Live"
           github_deployment: true
           deployment_environment: 'production'
           github_token: ${{ secrets.GITHUB_TOKEN }}
