@@ -46,14 +46,22 @@ jobs:
       - name: Build project
         run: npm run build
 
+      # - name: Deploy to Render
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   uses: JorgeLNJunior/render-deploy@v1.4.7
+      #   with:
+      #     service_id: ${{ secrets.RENDER_SERVICE_ID }}
+      #     api_key: ${{ secrets.RENDER_API_KEY }}
+      #     clear_cache: true # Útil para Angular para evitar problemas de versiones viejas
+      #     wait_deploy: false # El workflow esperará a que Render diga "Live"
+      #     github_deployment: true
+      #     deployment_environment: 'production'
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to Render
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: JorgeLNJunior/render-deploy@v1.4.7
+        id: deploy # Le ponemos un ID para poder referenciarlo
+        uses: johnbeynon/render-deploy-action@v0.0.8
         with:
-          service_id: ${{ secrets.RENDER_SERVICE_ID }}
-          api_key: ${{ secrets.RENDER_API_KEY }}
-          clear_cache: true # Útil para Angular para evitar problemas de versiones viejas
-          wait_deploy: false # El workflow esperará a que Render diga "Live"
-          github_deployment: true
-          deployment_environment: 'production'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+          wait-for-success: true
