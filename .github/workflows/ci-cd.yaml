@@ -46,9 +46,10 @@ jobs:
       # 5. Resetear base de datos
       - name: Reset database
         working-directory: api
-        run: |
-          # rm -f newsletter.db
-          sqlite3 newsletter.db < reset_db.sql
+        run: sqlite3 newsletter.db < reset_db.sql
+        # run: |
+        #   rm -f newsletter.db
+        #   sqlite3 newsletter.db < reset_db.sql
 
       # 6. Levantar la API en background
       - name: Start API
