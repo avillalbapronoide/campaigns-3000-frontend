@@ -53,7 +53,12 @@ export const config: WebdriverIO.Config = {
     //
     capabilities: [{
         browserName: 'chrome',
-        browserVersion: 'latest'
+        browserVersion: 'latest',
+        'goog:chromeOptions': {
+            args: process.env.CI
+                ? ['--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage']
+                : []
+        }
     }],
 
     //
