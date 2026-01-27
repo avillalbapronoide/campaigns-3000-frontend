@@ -55,7 +55,7 @@ jobs:
         working-directory: api
         run: |
           npm start &
-          npx wait-on http://localhost:3009/api/health || npx wait-on http://localhost:3009 --timeout 30000
+          npx wait-on http://localhost:3009 || npx wait-on http://localhost:3009 --timeout 30000
 
       # 7. Instalar dependencias del frontend
       - name: Install frontend dependencies
