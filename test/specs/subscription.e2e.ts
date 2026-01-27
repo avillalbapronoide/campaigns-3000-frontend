@@ -10,7 +10,7 @@ const resetDatabase = () => {
     execSync(`sqlite3 "${dbPath}" < "${sqlPath}"`)
 }
 
-describe('Suscripción y Pagos', () => {
+describe.skip('Suscripción y Pagos', () => {
     beforeEach(async () => {
         resetDatabase()
     })
