@@ -1,0 +1,28 @@
+language: es-ES
+
+reviews:
+  profile: "chill"
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "src/app/**/*.ts"
+      instructions: |
+        Este es un proyecto Angular 21. Verifica:
+        - Uso correcto de signals y computed
+        - Servicios usando inject() en lugar de constructor injection
+        - Imports standalone (no NgModules)
+        - Tipado estricto de TypeScript
+    - path: "test/specs/**/*.ts"
+      instructions: |
+        Tests E2E con WebdriverIO. Verifica:
+        - Selectores: prioriza #id o [data-testid] sobre clases CSS
+        - Esperas: usa waitForExist/waitForDisplayed en lugar de browser.pause()
+        - Aserciones: usa expect de @wdio/globals
+        - Considera sugerir Page Object Model si hay selectores repetidos
+    - path: ".github/workflows/**/*.yaml"
+      instructions: |
+        Workflows de GitHub Actions. Verifica:
+        - Uso de secrets para credenciales
+        - Caching de dependencias npm
+        - Condiciones if apropiadas para steps
