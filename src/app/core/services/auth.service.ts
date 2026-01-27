@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { AuthResponse, User } from '../models/user.model';
+import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { AuthResponse, User } from '../models/user.model';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly apiUrl = environment.apiUrl;
 
   // Signals para el estado de autenticación
   currentUser = signal<User | null>(null);
@@ -29,7 +31,7 @@ export class AuthService {
   }
 
   login(credentials: { username: string; password: string }) {
-    return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
         this.currentUser.set(response.user);
         localStorage.setItem('token', response.token);
@@ -39,7 +41,7 @@ export class AuthService {
   }
 
   register(data: { username: string; email: string; password: string }) {
-    return this.http.post<AuthResponse>('/api/auth/register', data).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, data).pipe(
       tap(response => {
         this.currentUser.set(response.user);
         localStorage.setItem('token', response.token);

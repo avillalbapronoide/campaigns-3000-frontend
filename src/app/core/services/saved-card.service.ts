@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { environment } from '@env/environment'
 
 export interface SavedCard {
   id: number
@@ -16,24 +17,25 @@ export interface SavedCard {
 })
 export class SavedCardService {
   private readonly http = inject(HttpClient)
+  private readonly apiUrl = environment.apiUrl
 
   getAll() {
-    return this.http.get<SavedCard[]>('/api/saved-cards')
+    return this.http.get<SavedCard[]>(`${this.apiUrl}/saved-cards`)
   }
 
   create(data: { card_number: string; expiry: string; cvv: string; is_default?: boolean }) {
-    return this.http.post<SavedCard>('/api/saved-cards', data)
+    return this.http.post<SavedCard>(`${this.apiUrl}/saved-cards`, data)
   }
 
   setDefault(id: number) {
-    return this.http.patch(`/api/saved-cards/${id}/default`, {})
+    return this.http.patch(`${this.apiUrl}/saved-cards/${id}/default`, {})
   }
 
   delete(id: number) {
-    return this.http.delete(`/api/saved-cards/${id}`)
+    return this.http.delete(`${this.apiUrl}/saved-cards/${id}`)
   }
 
   getFullCard(id: number) {
-    return this.http.get<{ card_number: string; expiry: string; cvv: string }>(`/api/saved-cards/${id}/full`)
+    return this.http.get<{ card_number: string; expiry: string; cvv: string }>(`${this.apiUrl}/saved-cards/${id}/full`)
   }
 }
