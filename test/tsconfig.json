@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "@wdio/globals/types",
+      "@wdio/mocha-framework"
+    ],
+    "moduleResolution": "node",
+    "esModuleInterop": true
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}
