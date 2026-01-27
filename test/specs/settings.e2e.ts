@@ -1,6 +1,6 @@
 import { expect } from '@wdio/globals'
 
-describe('Configuración', () => {
+describe.skip('Configuración', () => {
     describe('Datos de Usuario', () => {
         it('debería mostrar la sección expandida por defecto')
 

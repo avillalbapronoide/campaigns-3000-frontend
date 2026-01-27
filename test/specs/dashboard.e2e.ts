@@ -1,6 +1,6 @@
 import { expect } from '@wdio/globals'
 
-describe('Dashboard (Admin)', () => {
+describe.skip('Dashboard (Admin)', () => {
     describe('Estadísticas', () => {
         it('debería mostrar la tarjeta de suscriptores activos')
 

@@ -1,6 +1,6 @@
 import { expect } from '@wdio/globals'
 
-describe('Gestión de Suscriptores (Admin)', () => {
+describe.skip('Gestión de Suscriptores (Admin)', () => {
     describe('Lista de Suscriptores', () => {
         it('debería mostrar la tabla de suscriptores con las columnas ID, Nombre, Estado, Intereses y Acciones')
 

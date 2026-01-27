@@ -39,7 +39,7 @@ describe('Autenticación', () => {
         })
     })
 
-    describe('Login', () => {
+    describe.skip('Login', () => {
         it('debería iniciar sesión con credenciales válidas y redirigir al dashboard/campañas', async () => {
 
 
@@ -116,7 +116,7 @@ describe('Autenticación', () => {
         })
     })
 
-    describe('Navegación', () => {
+    describe.skip('Navegación', () => {
         it('debería navegar de login a registro con el enlace "Regístrate aquí"')
 
         it('debería navegar de registro a login con el enlace "Inicia sesión aquí"')

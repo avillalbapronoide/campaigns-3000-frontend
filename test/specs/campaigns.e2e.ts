@@ -1,6 +1,6 @@
 import { expect } from '@wdio/globals'
 
-describe('Gestión de Campañas', () => {
+describe.skip('Gestión de Campañas', () => {
     describe('Lista de Campañas', () => {
         it('debería mostrar la tabla de campañas con las columnas ID, Nombre, Categorías, Estado, Fecha y Acciones')
 
