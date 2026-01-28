@@ -8,6 +8,7 @@ reviews:
     base_branches:
       - main
       - development
+  poem: true
   path_instructions:
     - path: "src/app/**/*.ts"
       instructions: |
