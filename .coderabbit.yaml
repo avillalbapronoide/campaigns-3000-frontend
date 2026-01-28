@@ -5,6 +5,10 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    base_branches:
+      - main
+      - development
+  poem: true
   path_instructions:
     - path: "src/app/**/*.ts"
       instructions: |
@@ -17,7 +21,7 @@ reviews:
       instructions: |
         Tests E2E con WebdriverIO. Verifica:
         - Selectores: prioriza #id o [data-testid] sobre clases CSS
-        - Esperas: usa waitForExist/waitForDisplayed en lugar de browser.pause()
+        - Esperas: usa waitForExist, waitForDisplayed y resto de métodos de espera de WebdriverIO en lugar de browser.pause()
         - Aserciones: usa expect de @wdio/globals
         - Considera sugerir Page Object Model si hay selectores repetidos
     - path: ".github/workflows/**/*.yaml"
