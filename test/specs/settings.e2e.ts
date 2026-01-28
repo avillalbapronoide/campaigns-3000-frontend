@@ -44,7 +44,9 @@ describe('Configuración', () => {
             const parentButton = await cardSectionHeader.parentElement()
             const sectionButton = await parentButton.parentElement()
             await sectionButton.click()
-            await browser.pause(500) // Esperar animación
+
+            const cardsList = await $('.cards-list, button.add-card-btn')
+            await cardsList.waitForDisplayed({ timeout: 3000 })
         })
 
         afterEach(async () => {
@@ -62,7 +64,11 @@ describe('Configuración', () => {
                 await $('#expiry').setValue('12/28')
                 await $('#cvv').setValue('123')
                 await $('button[type="submit"]*=Guardar Tarjeta').click()
-                await browser.pause(1000)
+                await $('.modal').waitForDisplayed({ timeout: 5000, reverse: true })
+                await browser.waitUntil(async () => {
+                    const cards = await $$('.card-item')
+                    return cards.length > 0
+                }, { timeout: 5000, timeoutMsg: 'La tarjeta no se añadió correctamente' })
             }
 
             // Ahora verificar que existe la lista
@@ -99,11 +105,14 @@ describe('Configuración', () => {
             await $('#cvv').setValue('123')
 
             // Guardar
-            const saveButton = await $('button[type="submit"]*=Guardar Tarjeta')
-            await saveButton.click()
+            await $('button[type="submit"]*=Guardar Tarjeta').click()
 
             // Esperar a que se cierre el modal y se recarguen las tarjetas
-            await browser.pause(1000)
+            await $('.modal').waitForDisplayed({ timeout: 5000, reverse: true })
+            await browser.waitUntil(async () => {
+                const cards = await $$('.card-item')
+                return cards.length > 0
+            }, { timeout: 5000, timeoutMsg: 'La tarjeta no se añadió correctamente' })
 
             // Verificar que se añadió la tarjeta
             const cardsAfter = await $$('.card-item')
@@ -121,7 +130,11 @@ describe('Configuración', () => {
                 await $('#expiry').setValue('06/29')
                 await $('#cvv').setValue('789')
                 await $('button[type="submit"]*=Guardar Tarjeta').click()
-                await browser.pause(1000)
+                await $('.modal').waitForDisplayed({ timeout: 5000, reverse: true })
+                await browser.waitUntil(async () => {
+                    const cards = await $$('.card-item')
+                    return cards.length > 0
+                }, { timeout: 5000, timeoutMsg: 'La tarjeta no se añadió correctamente' })
             }
 
             // Buscar un botón "Predeterminar" (solo existe si la tarjeta no es predeterminada)
@@ -129,10 +142,10 @@ describe('Configuración', () => {
 
             if (await predeterminarButton.isExisting()) {
                 await predeterminarButton.click()
-                await browser.pause(1000)
 
-                // Verificar que existe un badge de predeterminada (la lista se ha recargado)
                 const defaultBadge = await $('.default-badge')
+                await defaultBadge.waitForDisplayed({ timeout: 5000 })
+
                 await expect(defaultBadge).toBeExisting()
                 await expect(defaultBadge).toHaveText('Predeterminada')
             }
@@ -149,11 +162,16 @@ describe('Configuración', () => {
                     window.confirm = () => true
                 })
 
+                const countBefore = (await $$('.card-item')).length
+
                 // Hacer clic en el botón de eliminar de la primera tarjeta
                 const deleteButton = await $('.btn-danger-icon')
                 await deleteButton.click()
 
-                await browser.pause(500)
+                await browser.waitUntil(async () => {
+                    const cardsAfter = await $$('.card-item')
+                    return cardsAfter.length < countBefore
+                }, { timeout: 5000, timeoutMsg: 'La tarjeta no se eliminó correctamente' })
 
                 // Verificar que se eliminó
                 const cardsAfter = await $$('.card-item')
@@ -181,7 +199,11 @@ describe('Configuración', () => {
                     await checkbox.click()
                 }
                 await $('button[type="submit"]*=Guardar Tarjeta').click()
-                await browser.pause(1000)
+                await $('.modal').waitForDisplayed({ timeout: 5000, reverse: true })
+                await browser.waitUntil(async () => {
+                    const cards = await $$('.card-item')
+                    return cards.length > 0
+                }, { timeout: 5000, timeoutMsg: 'La tarjeta no se añadió correctamente' })
             }
 
             const defaultBadge = await $('.default-badge')
@@ -198,5 +220,31 @@ describe('Configuración', () => {
         it('debería colapsar una sección al expandir otra')
 
         it('debería mantener los datos del formulario al cambiar de sección')
+    })
+
+    describe('Pruebas', () => {
+        beforeEach(async () => {
+            await browser.url('http://localhost:4200')
+        })
+
+        it('Test 1', async () => {
+            const x = await $('/html/body/app-root/app-login/div/div/form/div[1]/input')
+            await x.setValue('admin')
+            await expect(x).toHaveValue('admin')
+        })
+
+        it('Test 2', async () => {
+            const input = await $('/html/body/app-root/app-login/div/div/form/div[1]/input')
+            await browser.pause(5000)
+            await input.setValue('admin')
+            await expect(input).toHaveValue('admin')
+        })
+
+        it('Test 3', async () => {
+            const input = await $('.login-container > div > form > div:nth-of-type(1) > input.form-input')
+            await browser.pause(5000)
+            await input.setValue('admin')
+            await expect(input).toHaveValue('admin')
+        })
     })
 })
