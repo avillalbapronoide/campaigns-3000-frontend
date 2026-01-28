@@ -5,6 +5,9 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    base_branches:
+      - main
+      - development
   path_instructions:
     - path: "src/app/**/*.ts"
       instructions: |
